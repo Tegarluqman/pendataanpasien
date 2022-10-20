@@ -1,10 +1,26 @@
 <?php
 include("koneksi.php");?>
+<h1>Data Pasien<h1>
+          <form action="pasien.php" method="get">
+	<label>Cari :</label>
+	<input type="text" name="cari">
+	<input type="submit" value="Cari">
+          <?php 
+if(isset($_GET['cari'])){
+	$cari = $_GET['cari'];
+	echo "<b>Hasil pencarian : ".$cari."</b>";
+}?>
+<?php
+include("koneksi.php");?>
 <html>
 <head>
 </head>
 <body>
-          <h1>Data Pasien<h1>
+
+</form>
+
+          
+
           <h4> <a href="index.php">kembali</a><h4>
           <table border="1">
           <tr>
@@ -20,10 +36,21 @@ include("koneksi.php");?>
           <th>tanggal lahir</th>
           <th>no. kamar</th>
           </tr>
+         
+
 <?php
 include("koneksi.php");
-$sql='SELECT*FROM tb_pasien';
-$query=mysqli_query($koneksi, $sql);
+
+	if(isset($_GET['cari'])){
+		$cari = $_GET['cari'];
+		$sql ="SELECT * FROM tb_pasien WHERE nama LIKE '%".$cari."%'";	
+                    $query=mysqli_query($koneksi, $sql);                             			
+	}else{
+		$sql='SELECT*FROM tb_pasien';
+                    $query=mysqli_query($koneksi, $sql);		
+	}
+
+
 while($tb_pasien=mysqli_fetch_array($query)){
           echo "<tr>";
           echo "<td>".$tb_pasien['id']."</td>";
@@ -38,7 +65,7 @@ while($tb_pasien=mysqli_fetch_array($query)){
           echo "<td>".$tb_pasien['tanggal_lahir']."</td>";
           echo "<td>".$tb_pasien['no_kamar']."</td>";
           echo "<td>";
-          echo "<a href='edit-barang.php?id=".$tb_pasien['id']."'>Edit</a> |";
+          echo "<a href='edit_pasien.php?id=".$tb_pasien['id']."'>Edit</a> |";
           echo "<a href='proses_hapus.php?id=".$tb_pasien['id']."'>Hapus</a>";
           echo "</tr>";
 }
